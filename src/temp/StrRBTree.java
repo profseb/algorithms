@@ -1,7 +1,4 @@
-
-
-import numbers.RBNode;
-
+package temp;
 public class StrRBTree {
 	
 	public static final StrRBNode NIL = null; // sentinela apontando para null
@@ -13,7 +10,7 @@ public class StrRBTree {
 	*/
 	public StrRBTree() {
 		
-		this.root = new StrRBNode();
+		this.root = null;
 		
 	}
 	
@@ -24,27 +21,27 @@ public class StrRBTree {
 	
 	public void RBInsert(String num) {
 		
-		StrRBNode q = RBSearch(this.root, num);
+		StrRBNode q = this.RBSearch(this.root, num);
 		
-		if (!q.isNil()) {
+		if (q != null) {
 			System.out.println("A palavra \"" + num +"\" foi inserida anteriormente.");
 		} else {
-			
+		
 			StrRBNode n = new StrRBNode(num);		
-			StrRBNode y = new StrRBNode();
+			StrRBNode y = StrRBTree.NIL;
 			StrRBNode x = this.root;
 									
-			while(!x.isNil()) {
-				//System.out.println("while");
+			while(x != StrRBTree.NIL) {
 				
-				y = x;					
+				y = x;	
+				
 				x = (n.key.compareTo(x.key) < 1) ? x.left:x.right; // operador ternária para simplificar...
 							
 			}
-						
-			n.p = y;				
 					
-			if (y.isNil()) {
+			n.p = StrRBNode.getRBNode(y);
+					
+			if (y == StrRBTree.NIL) {
 				this.root = n;
 			} else if (n.key.compareTo(y.key) < 1) { // removi o n.key == null ||
 				y.left = n;
@@ -52,8 +49,8 @@ public class StrRBTree {
 				y.right = n;
 			}
 			
-			n.left = new StrRBNode();
-			n.right = new StrRBNode();			
+			n.left = StrRBTree.NIL;
+			n.right = StrRBTree.NIL;
 			n.color = StrRBNode.RBColor.RED;
 			
 			RBInsertFixup(n);				
@@ -62,19 +59,19 @@ public class StrRBTree {
 	
 	private void RBDump(StrRBNode n) {
 		
-		System.out.print("k(" + n.key + ") l(" + n.left.key + ") r(" + n.right.key + ") p(" + n.p.key + ")" + " [" + n.color + "]");
+		System.out.print("k(" + n.key + ") l(" + StrRBNode.getRBNode(n.left).key + ") r(" + StrRBNode.getRBNode(n.right).key + ") p(" + StrRBNode.getRBNode(n.p).key + ")" + " [" + n.color + "]");
 		System.out.println((this.root == n) ? " {ROOT}":"");
 		
 	}
 	
 	private void RBDumpCheck(StrRBNode n) {
 		
-		System.out.print("(" + ((n.p.key == null) ? "NIL":n.p.key) + ", "); 
+		System.out.print("(" + ((StrRBNode.getRBNode(n.p).key == null) ? "NIL":StrRBNode.getRBNode(n.p).key) + ", "); 
 		System.out.print(n.key + ", ");
 		System.out.print(((n.color == StrRBNode.RBColor.BLACK) ? "preto":"vermelho") + ", ");
 		System.out.print(RBBlackHeight(n) + ", "); // calcular altura negra
-		System.out.print(((n.left.isNil()) ? "NIL":n.left.key)+ ", ");
-		System.out.println(((n.right.isNil()) ? "NIL":n.right.key)+")");
+		System.out.print(((StrRBNode.getRBNode(n.left).key == null) ? "NIL":StrRBNode.getRBNode(n.left).key)+ ", ");
+		System.out.println(((StrRBNode.getRBNode(n.right).key == null) ? "NIL":StrRBNode.getRBNode(n.right).key)+")");
 		
 	}
 		
@@ -82,12 +79,14 @@ public class StrRBTree {
 	 * Insere um nó na árvore 
 	*/	
 	private void RBInsertFixup(StrRBNode z) {
+		
+		StrRBNode n = z;
 									
 		while(z.p.color == StrRBNode.RBColor.RED) {
-				
+			
 			if (z.p == z.p.p.left) {
 				
-				StrRBNode y = z.p.p.right;
+				StrRBNode y = StrRBNode.getRBNode(z.p.p.right);
 								
 				if (y.color == StrRBNode.RBColor.RED) {
 					z.p.color = StrRBNode.RBColor.BLACK;
@@ -112,7 +111,7 @@ public class StrRBTree {
 				
 			} else {
 				
-				StrRBNode y = z.p.p.left;
+				StrRBNode y = StrRBNode.getRBNode(z.p.p.left);
 											
 				if (y.color == StrRBNode.RBColor.RED) {
 					z.p.color = StrRBNode.RBColor.BLACK;
@@ -146,15 +145,15 @@ public class StrRBTree {
 		
 	private void RBLeftRotate(StrRBNode n) {
 			
-		StrRBNode y = n.right;
+		StrRBNode y = StrRBNode.getRBNode(n.right);
 								
 		n.right = y.left;
 			
-		if (!y.left.isNil()) {
+		if (y.left != StrRBTree.NIL) {
 			y.left.p = n;
 		}
 	
-		y.p = n.p;
+		y.p = StrRBNode.getRBNode(n.p);
 							
 		if (n.p.isNil()) {
 			this.root = y;
@@ -174,11 +173,11 @@ public class StrRBTree {
 	
 	private void RBRightRotate(StrRBNode n) {
 				
-		StrRBNode y = n.left;
+		StrRBNode y = StrRBNode.getRBNode(n.left);
 						
 		n.left = y.right;	
 			
-		if (!y.right.isNil()) {
+		if (y.right != StrRBTree.NIL) {
 			y.right.p = n;
 		}
 		
@@ -202,8 +201,7 @@ public class StrRBTree {
 	
 	public StrRBNode RBSearch(StrRBNode r, String key) {
 		
-		while (!r.isNil() && !r.key.equals(key)) {
-			
+		while (r != null && !r.key.equals(key)) {
 	       if (r.key.compareTo(key) > 0) 
 	          r = r.left;
 	       else
@@ -218,7 +216,7 @@ public class StrRBTree {
 		
 		StrRBNode x = null;
 		
-		if (z.isNil()) {
+		if (z == null) {
 			System.out.println("A palavra \"" + num +"\" foi removida anteriormente ou nao foi inserida.");
 			
 		} else {
@@ -228,33 +226,30 @@ public class StrRBTree {
 			StrRBNode y = z;
 										
 			StrRBNode.RBColor yColor = y.color;
-					
-			if (z.left.isNil()) {
-				
-				x = z.right;			
+			
+			if (z.left == StrRBTree.NIL) {
+							
+				x = StrRBNode.getRBNode(z.right);			
 				RBTransplant(z, z.right);	
 				
-			} else if (z.right.isNil()) {
+			} else if (z.right == StrRBTree.NIL) {
 				
-				x = z.left;	
+				x = StrRBNode.getRBNode(z.left);	
 				RBTransplant(z, z.left);
 			} else {
-				
-				System.out.println("caso 3");
 								
 				y = RBTreeMinimum(z.right);
 				
 				yColor = y.color;
 										
-				x = y.right;	
-														
+				x = StrRBNode.getRBNode(y.right);	
+										
 				if (y.p == z) {					
 					x.p = y;
 				} else {
-					
 					RBTransplant(y, y.right);
 								
-					y.right = z.right;				
+					y.right = StrRBNode.getRBNode(z.right);				
 					y.right.p = y;
 				}
 							
@@ -281,19 +276,21 @@ public class StrRBTree {
 	
 	private void RBDeleteFixup(StrRBNode x) {
 		
+		System.out.println("##########");
+
 		System.out.println(x != this.root && x.color == StrRBNode.RBColor.BLACK);
 				
 		while(x != this.root && x.color == StrRBNode.RBColor.BLACK) {
 			
-			if (x == x.p.left) {
+			if (x == StrRBNode.getRBNode(x.p.left)) {
 								
-				StrRBNode y = x.p.right;
+				StrRBNode y = StrRBNode.getRBNode(x.p.right);
 				
 				if (y.color == StrRBNode.RBColor.RED) { // caso 1
 					y.color = StrRBNode.RBColor.BLACK;
 					x.p.color = StrRBNode.RBColor.RED;
 					RBLeftRotate(x.p);
-					y = x.p.right;
+					y = StrRBNode.getRBNode(x.p.right);
 				}
 				
 				if (y.left.color == StrRBNode.RBColor.BLACK && y.right.color == StrRBNode.RBColor.BLACK) { // caso 2
@@ -319,7 +316,7 @@ public class StrRBTree {
 				
 			} else {
 								
-				StrRBNode y = x.p.left;
+				StrRBNode y = StrRBNode.getRBNode(x.p.left);
 				
 				if (y.color == StrRBNode.RBColor.RED) { // caso 1
 					y.color = StrRBNode.RBColor.BLACK;
@@ -357,11 +354,11 @@ public class StrRBTree {
 	}
 	
 	private StrRBNode RBTreeMinimum(StrRBNode n) {
-		
-		while(!n.left.isNil()) {		
+				
+		//while(!StrRBNode.getRBNode(n.left).isNil()) {
+		while(n.left != StrRBTree.NIL) {
 			n = n.left;
 		}
-		
 		return n;
 	}
 	
@@ -382,7 +379,7 @@ public class StrRBTree {
 				i++;
 			}			
 		}		
-		return i;
+		return i+1;
 	}
 	
 	private void RBTransplant(StrRBNode u, StrRBNode v) {
@@ -396,13 +393,13 @@ public class StrRBTree {
 			u.p.right = v;
 		}
 		
-		v.p = u.p;		
+		StrRBNode.getRBNode(v).p = StrRBNode.getRBNode(u.p);		
 		
 	}
 	
 	public void RBCheck(StrRBNode r) {
 		
-		if (!r.isNil()) {
+		if (r != StrRBTree.NIL) {
 			RBDumpCheck(r);
 			RBCheck(r.left);			
 			RBCheck(r.right);
@@ -412,7 +409,7 @@ public class StrRBTree {
 	
 	public void RBPrint(StrRBNode r) {
 		
-		if (!r.isNil()) {
+		if (r != StrRBTree.NIL) {
 			RBPrint(r.left);
 			System.out.print(r.key+" ");
 			RBPrint(r.right);

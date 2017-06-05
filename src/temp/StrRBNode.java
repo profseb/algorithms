@@ -1,4 +1,4 @@
-
+package temp;
 import numbers.RBColor;
 
 public class StrRBNode {
@@ -27,14 +27,22 @@ public class StrRBNode {
 		this.nil = false;
 		
 	}
-			
+	
+	public static StrRBNode getRBNode(StrRBNode n) {
+		if (n == null) {
+			return new StrRBNode();
+		} else {
+			return n;
+		}
+	}
+		
 	public StrRBNode() {
 		
 		this.key = null;
 		this.left = null;
 		this.right = null;
 		this.p = null;
-		this.color = RBColor.BLACK;
+		this.color = null;
 		this.nil = true;
 				
 	}

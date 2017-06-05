@@ -35,7 +35,8 @@ public class RBNode {
 		this.left = null;
 		this.right = null;
 		this.p = null;
-		this.color = null;		
+		this.color = RBColor.BLACK;
+		this.nil = true;
 				
 	}
 		
